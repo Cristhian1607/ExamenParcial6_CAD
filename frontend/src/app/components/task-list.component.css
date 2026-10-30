@@ -133,11 +133,6 @@ h1 {
   opacity: 0.68;
 }
 
-.new-task-button span {
-  padding-right: 5px;
-  font-size: 16px;
-}
-
 .summary {
   gap: 15px;
   margin-bottom: 24px;
@@ -654,12 +649,6 @@ h2 {
     align-items: flex-end;
     gap: 10px;
     padding: 25px 0 19px;
-  }
-
-  .new-task-button {
-    flex: 0 0 auto;
-    padding: 0 11px;
-    font-size: 10px;
   }
 
   .subtitle {

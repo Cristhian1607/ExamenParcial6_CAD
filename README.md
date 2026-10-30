@@ -6,8 +6,6 @@ Aplicación web para administrar tareas personales con Angular, ASP.NET Core Web
 
 - `backend/`: API REST, validación, persistencia MongoDB y consultas LINQ.
 - `frontend/`: interfaz Angular responsive y consumo de la API.
-- `Informe/`: informe formal con estructura APA y espacio para evidencias reales.
-
 ## Requisitos
 
 - .NET 10 SDK.
@@ -76,10 +74,6 @@ Set-Location .\frontend
 npm run build
 npm test -- --watch=false
 ```
-
-## Entrega e informe
-
-El informe formal se encuentra en [`Informe/Informe_Parcial1.html`](./Informe/Informe_Parcial1.html). Agrega las tres capturas auténticas descritas en el informe antes de entregar. Para generar PDF, abre el HTML en el navegador y selecciona **Imprimir > Guardar como PDF**.
 
 ## Repositorios guía
 

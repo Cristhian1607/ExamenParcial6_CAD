@@ -14,6 +14,8 @@
 .vscode/
 .idea/
 
-# Evidence images are deliverables and should be tracked.
+# El informe y sus evidencias se entregan por separado del repositorio de código.
+/Informe/
+
 Thumbs.db
 Desktop.ini

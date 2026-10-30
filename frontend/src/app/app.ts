@@ -6,4 +6,4 @@ import { TaskListComponent } from './components/task-list.component';
   selector: 'app-root',
   templateUrl: './app.html',
 })
-export class App {}
+export class AppComponent {}
