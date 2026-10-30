@@ -1,4 +1,4 @@
-# Agenda clara — Parcial 1 de Programación 6
+# Agenda Clara — Examen Programacion de Computadoras VI
 
 Aplicación web para administrar tareas personales con Angular, ASP.NET Core Web API, MongoDB Atlas y LINQ.
 
@@ -75,9 +75,3 @@ npm run build
 npm test -- --watch=false
 ```
 
-## Repositorios guía
-
-- [Tarea1Angular](https://github.com/Cristhian1607/Tarea1Angular)
-- [SistemaVentasAC2P6CAD](https://github.com/Cristhian1607/SistemaVentasAC2P6CAD)
-- [HRMongoApiRest](https://github.com/brav88/HRMongoApiRest)
-- [LinqSamples](https://github.com/brav88/LinqSamples)
