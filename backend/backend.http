@@ -1,0 +1,51 @@
+@GestorTareas_HostAddress = http://localhost:5175
+
+GET {{GestorTareas_HostAddress}}/health
+Accept: application/json
+
+###
+
+GET {{GestorTareas_HostAddress}}/api/tareas?ordenarPor=fechaLimite&direccion=asc
+Accept: application/json
+
+###
+
+GET {{GestorTareas_HostAddress}}/api/tareas?estado=Pendiente&buscar=estudio&ordenarPor=prioridad&direccion=desc
+Accept: application/json
+
+###
+
+POST {{GestorTareas_HostAddress}}/api/tareas
+Content-Type: application/json
+
+{
+  "titulo": "Preparar examen",
+  "descripcion": "Repasar los temas de LINQ y API REST",
+  "fechaLimite": "2026-11-05",
+  "prioridad": 3,
+  "estado": "Pendiente"
+}
+
+###
+
+@tareaId = PASTE_OBJECT_ID_HERE
+
+GET {{GestorTareas_HostAddress}}/api/tareas/{{tareaId}}
+Accept: application/json
+
+###
+
+PUT {{GestorTareas_HostAddress}}/api/tareas/{{tareaId}}
+Content-Type: application/json
+
+{
+  "titulo": "Preparar examen",
+  "descripcion": "Repasar los temas de LINQ y API REST",
+  "fechaLimite": "2026-11-05",
+  "prioridad": 3,
+  "estado": "Completada"
+}
+
+###
+
+DELETE {{GestorTareas_HostAddress}}/api/tareas/{{tareaId}}

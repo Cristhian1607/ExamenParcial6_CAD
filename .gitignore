@@ -1,0 +1,19 @@
+# .NET
+**/bin/
+**/obj/
+
+# Angular / Node
+**/node_modules/
+**/dist/
+**/.angular/
+
+# Local environment and IDE files
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+
+# Evidence images are deliverables and should be tracked.
+Thumbs.db
+Desktop.ini

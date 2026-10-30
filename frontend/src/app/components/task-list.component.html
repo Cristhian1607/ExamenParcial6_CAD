@@ -1,0 +1,187 @@
+<main class="page-shell">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Agenda clara, inicio">
+      <span class="brand-mark" aria-hidden="true">✓</span>
+      <span>agenda<span class="brand-light">clara</span></span>
+    </a>
+    <span class="course-tag">ORGANIZA TU DÍA</span>
+  </header>
+
+  <section class="intro">
+    <div>
+      <p class="eyebrow">TU ESPACIO PERSONAL</p>
+      <h1>Agenda clara</h1>
+      <p class="subtitle">Un paso a la vez. Tus pendientes, bajo control.</p>
+    </div>
+    <button class="button button-primary new-task-button" type="button" (click)="nuevaTarea()">
+      <span aria-hidden="true">＋</span> Nueva tarea
+    </button>
+  </section>
+
+  <section class="summary" aria-label="Resumen de tareas">
+    <article class="summary-card">
+      <span class="summary-icon total-icon" aria-hidden="true">▤</span>
+      <div><span class="summary-label">Tareas visibles</span><strong>{{ tareas.length }}</strong></div>
+    </article>
+    <article class="summary-card">
+      <span class="summary-icon pending-icon" aria-hidden="true">◷</span>
+      <div><span class="summary-label">Pendientes</span><strong>{{ pendientes }}</strong></div>
+    </article>
+    <article class="summary-card">
+      <span class="summary-icon done-icon" aria-hidden="true">✓</span>
+      <div><span class="summary-label">Completadas</span><strong>{{ completadas }}</strong></div>
+    </article>
+  </section>
+
+  @if (error) {
+    <div class="alert" role="alert">
+      <span>{{ error }}</span>
+      <button type="button" class="alert-retry" (click)="cargarTareas()">Reintentar</button>
+    </div>
+  }
+
+  <section class="workspace">
+    <section class="task-panel" aria-labelledby="task-list-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">PLANIFICACIÓN</p>
+          <h2 id="task-list-heading">Mis tareas</h2>
+        </div>
+        <span class="task-count">{{ tareas.length }} {{ tareas.length === 1 ? 'tarea' : 'tareas' }}</span>
+      </div>
+
+      <div class="filters">
+        <label class="search-field">
+          <span class="visually-hidden">Buscar por título o descripción</span>
+          <span aria-hidden="true">⌕</span>
+          <input
+            type="search"
+            placeholder="Buscar una tarea..."
+            [value]="busqueda"
+            (input)="actualizarBusqueda($event)"
+          />
+        </label>
+        <label class="select-field">
+          <span class="visually-hidden">Filtrar por estado</span>
+          <select [value]="filtroEstado" (change)="actualizarFiltroEstado($event)">
+            <option value="">Todos los estados</option>
+            <option value="Pendiente">Pendientes</option>
+            <option value="Completada">Completadas</option>
+          </select>
+        </label>
+        <label class="select-field sort-field">
+          <span class="visually-hidden">Ordenar tareas</span>
+          <select [value]="ordenarPor" (change)="actualizarOrden($event)">
+            <option value="fechaLimite">Fecha límite</option>
+            <option value="prioridad">Prioridad</option>
+          </select>
+        </label>
+      </div>
+
+      @if (cargando) {
+        <div class="empty-state"><span class="loader" aria-hidden="true"></span><p>Cargando tus tareas...</p></div>
+      } @else if (tareas.length === 0) {
+        <div class="empty-state">
+          <span class="empty-icon" aria-hidden="true">✦</span>
+          <h3>Aún no hay tareas aquí</h3>
+          <p>Agrega una tarea o cambia los filtros para ver tus actividades.</p>
+          <button type="button" class="button button-secondary" (click)="nuevaTarea()">Crear mi primera tarea</button>
+        </div>
+      } @else {
+        <div class="task-list">
+          @for (tarea of tareas; track tarea.id) {
+            <article class="task-card" [class.completed-card]="tarea.estado === 'Completada'">
+              <button
+                type="button"
+                class="check-button"
+                [class.checked]="tarea.estado === 'Completada'"
+                [attr.aria-label]="tarea.estado === 'Completada' ? 'Marcar como pendiente' : 'Marcar como completada'"
+                (click)="alternarEstado(tarea)"
+              >{{ tarea.estado === 'Completada' ? '✓' : '' }}</button>
+              <div class="task-content">
+                <div class="task-title-row">
+                  <h3 [class.completed-title]="tarea.estado === 'Completada'">{{ tarea.titulo }}</h3>
+                  <span class="priority" [class]="'priority priority-' + tarea.prioridad">
+                    {{ prioridadTexto(tarea.prioridad) }}
+                  </span>
+                </div>
+                <p class="task-description">{{ tarea.descripcion }}</p>
+                <div class="task-meta">
+                  <span class="due-date"><span aria-hidden="true">▦</span> {{ tarea.fechaLimite | date:'d MMM y':'UTC':'es' }}</span>
+                  <span class="status" [class.status-done]="tarea.estado === 'Completada'">
+                    {{ tarea.estado }}
+                  </span>
+                </div>
+              </div>
+              <div class="task-actions">
+                <button type="button" class="icon-button" aria-label="Editar tarea" (click)="editar(tarea)">✎</button>
+                <button type="button" class="icon-button delete-button" aria-label="Eliminar tarea" (click)="eliminar(tarea)">×</button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+
+    <aside class="form-panel" id="formulario-tarea">
+      <div class="section-heading form-heading">
+        <div>
+          <p class="eyebrow">{{ editandoId ? 'ACTUALIZA TU PLAN' : 'SIGUIENTE PASO' }}</p>
+          <h2>{{ editandoId ? 'Editar tarea' : 'Nueva tarea' }}</h2>
+        </div>
+        <span class="form-sparkle" aria-hidden="true">✳</span>
+      </div>
+      <p class="form-intro">Define lo importante y deja que tu agenda te acompañe.</p>
+
+      <form [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+        <label class="form-label" for="titulo">Título</label>
+        <input id="titulo" class="form-input" type="text" formControlName="titulo" maxlength="100" placeholder="Ej. Preparar presentación" />
+        @if (formulario.controls.titulo.touched && formulario.controls.titulo.invalid) {
+          <span class="field-error">Escribe un título de hasta 100 caracteres.</span>
+        }
+
+        <label class="form-label" for="descripcion">Descripción</label>
+        <textarea id="descripcion" class="form-input description-input" formControlName="descripcion" maxlength="500" rows="3" placeholder="Agrega algunos detalles..."></textarea>
+        @if (formulario.controls.descripcion.touched && formulario.controls.descripcion.invalid) {
+          <span class="field-error">La descripción es obligatoria (máximo 500 caracteres).</span>
+        }
+
+        <div class="form-row">
+          <div class="form-column">
+            <label class="form-label" for="fechaLimite">Fecha límite</label>
+            <input id="fechaLimite" class="form-input" type="date" formControlName="fechaLimite" />
+          </div>
+          <div class="form-column">
+            <label class="form-label" for="prioridad">Prioridad</label>
+            <select id="prioridad" class="form-input" formControlName="prioridad">
+              <option [ngValue]="1">Baja</option>
+              <option [ngValue]="2">Media</option>
+              <option [ngValue]="3">Alta</option>
+            </select>
+          </div>
+        </div>
+
+        @if (editandoId) {
+          <label class="form-label" for="estado">Estado</label>
+          <select id="estado" class="form-input" formControlName="estado">
+            <option value="Pendiente">Pendiente</option>
+            <option value="Completada">Completada</option>
+          </select>
+        }
+
+        <div class="form-buttons">
+          <button type="submit" class="button button-primary save-button" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : editandoId ? 'Guardar cambios' : 'Agregar tarea' }}
+          </button>
+          @if (editandoId) {
+            <button type="button" class="button button-quiet" (click)="nuevaTarea()">Cancelar</button>
+          }
+        </div>
+      </form>
+
+      <div class="privacy-note"><span aria-hidden="true">✦</span> Cada pequeño avance cuenta.</div>
+    </aside>
+  </section>
+
+  <footer class="footer">Un día organizado empieza con un primer paso.</footer>
+</main>
