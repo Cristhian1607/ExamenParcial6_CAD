@@ -1,7 +1,7 @@
 import { DatePipe, registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EstadoTarea, Tarea, TareaInput } from '../models/tarea';
 import { FiltrosTarea, TareaService } from '../services/tarea.service';
@@ -17,6 +17,8 @@ registerLocaleData(localeEs);
 })
 export class TaskListComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
+  // Actualiza la vista después de las respuestas asíncronas de HTTP.
+  private readonly changeDetector = inject(ChangeDetectorRef);
   private readonly tareaService = inject(TareaService);
 
   readonly formulario = this.formBuilder.nonNullable.group({
@@ -63,10 +65,12 @@ export class TaskListComponent implements OnInit {
         next: (tareas) => {
           this.tareas = tareas;
           this.cargando = false;
+          this.changeDetector.markForCheck();
         },
         error: (error: HttpErrorResponse) => {
           this.error = this.mensajeError(error);
           this.cargando = false;
+          this.changeDetector.markForCheck();
         },
       });
   }
@@ -131,10 +135,12 @@ export class TaskListComponent implements OnInit {
         this.guardando = false;
         this.nuevaTarea();
         this.cargarTareas();
+        this.changeDetector.markForCheck();
       },
       error: (error: HttpErrorResponse) => {
         this.error = this.mensajeError(error);
         this.guardando = false;
+        this.changeDetector.markForCheck();
       },
     });
   }
@@ -152,6 +158,7 @@ export class TaskListComponent implements OnInit {
       next: () => this.cargarTareas(),
       error: (error: HttpErrorResponse) => {
         this.error = this.mensajeError(error);
+        this.changeDetector.markForCheck();
       },
     });
   }
@@ -165,6 +172,7 @@ export class TaskListComponent implements OnInit {
       next: () => this.cargarTareas(),
       error: (error: HttpErrorResponse) => {
         this.error = this.mensajeError(error);
+        this.changeDetector.markForCheck();
       },
     });
   }

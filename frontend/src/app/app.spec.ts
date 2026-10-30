@@ -15,9 +15,10 @@ describe('App', () => {
 
     const requests = TestBed.inject(HttpTestingController);
     requests.expectOne((request) => request.url === '/api/tareas').flush([]);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(fixture.nativeElement.textContent).toContain('Agenda clara');
+    expect(fixture.nativeElement.textContent).toContain('Aún no hay tareas aquí');
     requests.verify();
   });
 });
