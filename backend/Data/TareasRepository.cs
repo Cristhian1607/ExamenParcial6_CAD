@@ -4,6 +4,7 @@ using MongoDB.Driver.Linq;
 
 namespace GestorTareas.Api.Data;
 
+/// <summary>Centraliza las operaciones de MongoDB y las consultas LINQ de tareas.</summary>
 public sealed class TareasRepository
 {
     private readonly IMongoCollection<Tarea> _tareas;
@@ -25,6 +26,7 @@ public sealed class TareasRepository
         string direccion,
         CancellationToken cancellationToken)
     {
+        // Los filtros y el orden se aplican antes de pedir los resultados a MongoDB.
         IQueryable<Tarea> consulta = _tareas.AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(estado))
@@ -54,6 +56,7 @@ public sealed class TareasRepository
     public async Task<Tarea?> ObtenerPorIdAsync(string id, CancellationToken cancellationToken) =>
         await _tareas.Find(tarea => tarea.Id == id).FirstOrDefaultAsync(cancellationToken);
 
+    /// <summary>Guarda una tarea y devuelve el documento con su identificador generado.</summary>
     public async Task<Tarea> CrearAsync(Tarea tarea, CancellationToken cancellationToken)
     {
         await _tareas.InsertOneAsync(tarea, cancellationToken: cancellationToken);

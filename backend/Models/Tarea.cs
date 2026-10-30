@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace GestorTareas.Api.Models;
 
+/// <summary>Representa una tarea almacenada en la colección de MongoDB.</summary>
 public sealed class Tarea
 {
     [BsonId]
@@ -26,6 +27,7 @@ public sealed class Tarea
     public required string Estado { get; set; }
 }
 
+/// <summary>Datos de entrada para crear o actualizar una tarea.</summary>
 public sealed class TareaInput
 {
     [Required]

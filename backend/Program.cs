@@ -11,6 +11,7 @@ if (string.IsNullOrWhiteSpace(connectionString))
         "Configure MongoDB:ConnectionString using the MongoDB__ConnectionString environment variable.");
 }
 
+// Un cliente MongoDB compartido atiende las solicitudes de la aplicación.
 builder.Services.AddSingleton<IMongoClient>(_ => new MongoClient(connectionString));
 builder.Services.AddSingleton<TareasRepository>();
 builder.Services.AddControllers();
@@ -20,6 +21,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    // Scalar muestra la documentación OpenAPI solo durante el desarrollo.
     app.MapOpenApi();
     app.MapScalarApiReference();
 }

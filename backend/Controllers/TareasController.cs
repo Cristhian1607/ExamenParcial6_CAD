@@ -5,6 +5,7 @@ using MongoDB.Bson;
 
 namespace GestorTareas.Api.Controllers;
 
+/// <summary>Expone las operaciones CRUD y los filtros HTTP de la API de tareas.</summary>
 [ApiController]
 [Route("api/tareas")]
 public sealed class TareasController(TareasRepository repository) : ControllerBase
@@ -17,6 +18,7 @@ public sealed class TareasController(TareasRepository repository) : ControllerBa
         [FromQuery] string direccion = "asc",
         CancellationToken cancellationToken = default)
     {
+        // Se rechazan filtros desconocidos para evitar consultas con criterios inválidos.
         if (estado is not null && estado is not ("Pendiente" or "Completada"))
         {
             return BadRequest(new { message = "estado debe ser Pendiente o Completada." });

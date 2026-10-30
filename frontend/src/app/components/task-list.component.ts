@@ -8,6 +8,7 @@ import { FiltrosTarea, TareaService } from '../services/tarea.service';
 
 registerLocaleData(localeEs);
 
+/** Presenta las tareas y coordina el formulario con el servicio de la API. */
 @Component({
   selector: 'app-task-list',
   imports: [DatePipe, ReactiveFormsModule],
@@ -70,6 +71,7 @@ export class TaskListComponent implements OnInit {
       });
   }
 
+  /** Mantiene los filtros sincronizados con los controles de búsqueda. */
   actualizarBusqueda(evento: Event): void {
     this.busqueda = (evento.target as HTMLInputElement).value;
     this.cargarTareas();
@@ -119,6 +121,7 @@ export class TaskListComponent implements OnInit {
     this.guardando = true;
     this.error = '';
     const entrada = this.formulario.getRawValue();
+    // El mismo formulario crea o actualiza según exista una tarea seleccionada.
     const peticion = this.editandoId
       ? this.tareaService.actualizar(this.editandoId, entrada)
       : this.tareaService.crear(entrada);

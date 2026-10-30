@@ -10,12 +10,14 @@ export interface FiltrosTarea {
   direccion: 'asc' | 'desc';
 }
 
+/** Encapsula las solicitudes HTTP para mantener la API fuera de los componentes. */
 @Injectable({ providedIn: 'root' })
 export class TareaService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = '/api/tareas';
 
   obtenerTodas(filtros: FiltrosTarea): Observable<Tarea[]> {
+    // Los filtros vacíos se omiten para consultar sin restricciones.
     let params = new HttpParams()
       .set('ordenarPor', filtros.ordenarPor)
       .set('direccion', filtros.direccion);
